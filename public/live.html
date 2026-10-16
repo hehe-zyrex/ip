@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Visitor Feed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 20px;
+      font-family: -apple-system, Arial, sans-serif;
+      background: #0a0f1e; color: #e2e8f0; min-height: 100vh;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.6rem;
+      background: linear-gradient(125deg,#7AA9FF,#A5F3FC);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sub { color: #90a3bf; font-size: 0.85rem; margin-bottom: 20px; }
+
+    .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+    .stat {
+      background: #111827; border: 1px solid #1f2937;
+      border-radius: 12px; padding: 14px 20px; min-width: 120px;
+    }
+    .stat .num { font-size: 1.6rem; font-weight: 800; color: #93c5fd; }
+    .stat .lbl { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+
+    .live-dot {
+      display: inline-block; width: 8px; height: 8px;
+      background: #22c55e; border-radius: 50%;
+      box-shadow: 0 0 8px #22c55e;
+      animation: pulse 1.5s infinite;
+      margin-right: 6px;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    table {
+      width: 100%; border-collapse: collapse;
+      background: #111827; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    }
+    th, td {
+      padding: 12px; text-align: left;
+      font-size: 13px; border-bottom: 1px solid #1f2937;
+      vertical-align: top;
+    }
+    th {
+      background: #1e293b; color: #cbd5e1;
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    tr:hover { background: #0f172a; }
+    tr.new { animation: flash 2s ease-out; }
+    @keyframes flash { from { background: #1e3a8a; } to { background: transparent; } }
+
+    .ip { color: #fbbf24; font-family: monospace; font-weight: 600; }
+    .url { color: #93c5fd; word-break: break-all; }
+    .small { color: #94a3b8; font-size: 11px; word-break: break-word; }
+    .empty {
+      text-align: center; padding: 60px 20px;
+      color: #64748b; background: #111827; border-radius: 12px;
+      border: 1px dashed #334155;
+    }
+  </style>
+</head>
+<body>
+
+<h1><span class="live-dot"></span> Live Visitor Feed</h1>
+<div class="sub">Auto-refreshing every 3 seconds · No login needed</div>
+
+<div class="stats">
+  <div class="stat"><div class="num" id="total">0</div><div class="lbl">Total</div></div>
+  <div class="stat"><div class="num" id="unique">0</div><div class="lbl">Unique IPs</div></div>
+  <div class="stat"><div class="num" id="last">—</div><div class="lbl">Last visit</div></div>
+</div>
+
+<div id="content"></div>
+
+<script>
+let knownIds = new Set();
+
+async function poll() {
+  try {
+    const r = await fetch(`/api/stream?t=${Date.now()}`);
+    const data = await r.json();
+    const visitors = data.all || [];
+
+    if (visitors.length === 0) {
+      document.getElementById('content').innerHTML =
+        `<div class="empty">Waiting for visitors…</div>`;
+    } else {
+      render(visitors);
+    }
+
+    document.getElementById('total').textContent = visitors.length;
+    document.getElementById('unique').textContent =
+      new Set(visitors.map(v => v.ip)).size;
+    document.getElementById('last').textContent =
+      visitors[0] ? timeAgo(visitors[0].time) : '—';
+  } catch (e) { /* silent */ }
+}
+
+function render(visitors) {
+  const html = visitors.slice(0, 100).map(v => {
+    const isNew = !knownIds.has(v.id);
+    knownIds.add(v.id);
+    return `
+    <tr class="${isNew ? 'new' : ''}">
+      <td><span class="ip">${esc(v.ip)}</span></td>
+      <td>
+        <div class="url">${esc(v.page_url || '—')}</div>
+        <div class="small">↩ ${esc(v.referrer || 'Direct')}</div>
+      </td>
+      <td class="small">${esc((v.user_agent||'').slice(0,80))}</td>
+      <td class="small">${new Date(v.time).toLocaleString()}<br>
+        <span style="color:#22c55e">${timeAgo(v.time)}</span></td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+    <table>
+      <thead><tr><th>IP</th><th>Page</th><th>Device</th><th>Time</th></tr></thead>
+      <tbody>${html}</tbody>
+    </table>`;
+}
+
+function timeAgo(iso) {
+  const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (s < 5) return 'just now';
+  if (s < 60) return s + 's ago';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
+
+function esc(s) {
+  return String(s||'').replace(/[&<>"]/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+
+poll();
+setInterval(poll, 3000);
+</script>
+</body>
+</html>
